@@ -1,0 +1,20 @@
+[
+  {
+    "city": "Gotham",
+    "phone": "+888 111 222 333",
+    "email": "some@email.com",
+    "address": "123, Asd Str."
+  },
+  {
+    "city": "Moscow",
+    "phone": "+999 777 222 333",
+    "email": "another@email.com",
+    "address": "987, Vrf Str."
+  },
+  {
+    "city": "AAA",
+    "phone": "+888 111 222 333",
+    "email": "yet_another@email.com",
+    "address": "Hell knows where it is"
+  }
+]
