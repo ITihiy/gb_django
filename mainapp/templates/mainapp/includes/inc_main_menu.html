@@ -2,8 +2,8 @@
 <ul class="menu">
     <li><a href="{% url 'mainapp_index' %}"
            class="{% if request.resolver_match.url_name == 'mainapp_index' %}active{% endif %}">домой</a></li>
-    <li><a href="{% url 'mainapp_products' %}"
-           class="{% if request.resolver_match.url_name == 'mainapp_products' %}active{% endif %}">продукты</a></li>
+    <li><a href="{% url 'products:products' %}"
+           class="{% if request.resolver_match.namespace == 'products' %}active{% endif %}">продукты</a></li>
     <li><a href="{% url 'mainapp_contact' %}"
            class="{% if request.resolver_match.url_name == 'mainapp_contact' %}active{% endif %}">контакты</a></li>
 
