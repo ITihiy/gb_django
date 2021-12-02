@@ -16,4 +16,6 @@
 
 </ul>
 <a href="#" class="search"></a>
-<a href="#" class="basket"></a>
+<a href="{% url 'basketapp:basket' %}" class="basket">
+    <span>{{ basket.total_count }} - {{ basket.total_price }} p.</span>
+</a>
