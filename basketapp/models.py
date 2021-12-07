@@ -12,6 +12,8 @@ class Basket(models.Model):
 
     @classmethod
     def get_total_price_and_quantity(cls, user: settings.AUTH_USER_MODEL):
+        if not user.is_authenticated:
+            return {'total_count': 0, 'total_price': 0}
         result_quantity = 0
         result_price = 0
         user_baskets = cls.objects.filter(user=user)
@@ -19,3 +21,7 @@ class Basket(models.Model):
             result_quantity += basket.quantity
             result_price += basket.quantity * basket.product.price
         return {'total_count': result_quantity, 'total_price': result_price}
+
+    @property
+    def product_cost(self):
+        return self.quantity * self.product.price
