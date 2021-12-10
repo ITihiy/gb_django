@@ -3,7 +3,7 @@
 
 
 {% block content %}
-    <form class="form-horizontal" action="{% url 'authapp:edit' %}" method="post">
+    <form class="form-horizontal" action="{% url 'authapp:edit' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ edit_form.as_p }}
         <br>
@@ -11,7 +11,7 @@
         <a class="btn btn-primary form-control" href="{% url 'mainapp_index' %}">На главную</a>
     </form>
     <div class="user_avatar">
-        <img src="{% get_media_prefix %}{{ user.avatar }}" alt="" />
+        <img src="/media/{{ user.avatar }}" alt="" />
     </div>
 
 {% endblock %}
