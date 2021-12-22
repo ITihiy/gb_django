@@ -1,0 +1,10 @@
+{% extends 'adminapp/base.html' %}
+
+{% block content %}
+    <p>Вы уверены, что хотите удалить категорию {{ object.username }} ?</p>
+    <form method="post">
+    {% csrf_token %}
+    <input type="submit" value="Да">
+    </form>
+    <a class="btn btn-primary" href="{% url 'adminapp:users' %}">Нет</a>
+{% endblock %}
