@@ -1,14 +1,15 @@
 {% extends 'adminapp/base.html' %}
+{% load adminapp_tags %}
 
 {% block content %}
     <div class="users_list">
         <a class="btn btn-primary" style="color: white" href="{% url 'adminapp:user_create' %}">Добавить пользователя</a>
-        {% for item in objects_list %}
+        {% for item in object_list %}
             <div class="user_record" {% if not item.is_active %}
                 style="opacity: 0.5"
             {% endif %}>
                 <div class="user_avatar">
-                    <img src="/media/{{ item.avatar }}" alt="avatar"/>
+                    <img src="{{ item.avatar|media_for_users }}" alt="avatar"/>
                 </div>
                 <div class="user_role">
                     {% if item.is_superuser %}

@@ -2,6 +2,8 @@ import json
 import random
 
 from django.conf import settings
+from django.core.paginator import Paginator
+from django.http import Http404
 from django.shortcuts import render, get_object_or_404
 
 from basketapp.models import Basket
@@ -26,7 +28,7 @@ def index(request):
     return render(request, 'mainapp/index.html', {'products': popular_products, 'basket': basket})
 
 
-def products(request, pk=None):
+def products(request, pk=None, page=1):
     links_menu = ProductCategory.objects.all()[:4]
     if pk is not None:
         if pk == 0:
@@ -36,9 +38,14 @@ def products(request, pk=None):
             category_item = get_object_or_404(ProductCategory, pk=pk)
             products_list = Product.objects.filter(category__pk=pk)
 
+        paginator = Paginator(products_list, 2)
+        if not 1 <= page <= paginator.num_pages:
+            raise Http404()
+        products_paginator = paginator.page(page)
+
         context = {
             'links_menu': links_menu,
-            'products': products_list,
+            'products': products_paginator,
             'category': category_item,
             'basket': Basket.get_total_price_and_quantity(request.user)
         }
