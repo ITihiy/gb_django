@@ -6,16 +6,22 @@
            class="{% if request.resolver_match.namespace == 'products' %}active{% endif %}">продукты</a></li>
     <li><a href="{% url 'mainapp_contact' %}"
            class="{% if request.resolver_match.url_name == 'mainapp_contact' %}active{% endif %}">контакты</a></li>
-        {% if user.is_authenticated %}
-            <li><a href="{% url 'authapp:edit' %}">{% if user.first_name %}{{ user.first_name }}{% else %}Пользователь{% endif %}</a></li>
-            <li><a href="{% url 'authapp:logout' %}">Выйти</a></li>
-        {% else %}
-            <li><a href="{% url 'authapp:register' %}">Регистрация</a></li>
-            <li><a href="{% url 'authapp:login' %}">Войти</a></li>
-        {% endif %}
+    {% if user.is_authenticated %}
+        <li><a href="{% url 'authapp:edit' %}">
+            {% if user.first_name %}{{ user.first_name }}{% else %}Пользователь{% endif %}</a></li>
+        <li><a href="{% url 'authapp:logout' %}">Выйти</a></li>
+    {% else %}
+        <li><a href="{% url 'authapp:register' %}">Регистрация</a></li>
+        <li><a href="{% url 'authapp:login' %}">Войти</a></li>
+    {% endif %}
 
 </ul>
 <a href="#" class="search"></a>
 <a href="{% url 'basketapp:basket' %}" class="basket">
-    <span>{{ basket.total_count }} - {{ basket.total_price }} p.</span>
+    <span>
+    {% if basket %}
+        {{ basket.total_price|floatformat:0 }} руб.<br>
+        ({{ basket.total_count }} шт.)
+    {% endif %}
+    </span>
 </a>
