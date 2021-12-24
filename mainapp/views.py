@@ -6,7 +6,6 @@ from django.core.paginator import Paginator
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404
 
-from basketapp.models import Basket
 from mainapp.models import ProductCategory, Product
 
 POPULAR_SIZE = 4
@@ -24,8 +23,7 @@ def get_same_products(hot_product: Product):
 
 def index(request):
     popular_products = random.sample(list(Product.objects.all()), POPULAR_SIZE)
-    basket = Basket.get_total_price_and_quantity(request.user)
-    return render(request, 'mainapp/index.html', {'products': popular_products, 'basket': basket})
+    return render(request, 'mainapp/index.html', {'products': popular_products})
 
 
 def products(request, pk=None, page=1):
@@ -47,7 +45,6 @@ def products(request, pk=None, page=1):
             'links_menu': links_menu,
             'products': products_paginator,
             'category': category_item,
-            'basket': Basket.get_total_price_and_quantity(request.user)
         }
         return render(request, 'mainapp/products_list.html', context)
     hot_product = get_hot_product()
@@ -55,7 +52,6 @@ def products(request, pk=None, page=1):
         'links_menu': links_menu,
         'hot_product': hot_product,
         'same_products': get_same_products(hot_product),
-        'basket': Basket.get_total_price_and_quantity(request.user)
     }
     return render(request, 'mainapp/products.html', context)
 
@@ -70,6 +66,5 @@ def product(request, pk):
     context = {
         'links_menu': random.sample(list(ProductCategory.objects.all()), 4),
         'product': get_object_or_404(Product, pk=pk),
-        'basket': Basket.get_total_price_and_quantity(request.user)
     }
     return render(request, 'mainapp/product.html', context)

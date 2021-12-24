@@ -4,6 +4,8 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from authapp.forms import ShopUserLoginForm, ShopUserRegisterForm, ShopUserEditForm
+from authapp.models import ShopUser
+from authapp.services import send_verify_mail
 
 
 def login(request):
@@ -41,8 +43,21 @@ def register(request):
     if request.method == 'POST':
         register_form = ShopUserRegisterForm(request.POST, request.FILES)
         if register_form.is_valid():
-            register_form.save()
+            user = register_form.save()
+            send_verify_mail(user)
         return HttpResponseRedirect(reverse('authapp:login'))
     else:
         register_form = ShopUserRegisterForm()
         return render(request, 'authapp/register.html', {'register_form': register_form})
+
+
+def verify(request, email, activation_key):
+    user = ShopUser.objects.filter(email=email).first()
+    if user:
+        if user.activation_key == activation_key and user.is_activation_key_expired():
+            user.is_active = True
+            user.activation_key = None
+            user.activation_key_expired = None
+            user.save()
+            auth.login(request, user)
+    return render(request, 'authapp/verify.html')
