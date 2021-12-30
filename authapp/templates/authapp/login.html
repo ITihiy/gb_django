@@ -13,5 +13,5 @@
         <input class="form-control" type="submit" value="войти">
         <a class="btn btn-primary form-control" href="{% url 'authapp:register' %}">Регистрация</a>
     </form>
-
+        <a class="btn btn-primary form-control" href="{% url 'social:begin' 'github'%}?next=/">Github</a>
 {% endblock %}
