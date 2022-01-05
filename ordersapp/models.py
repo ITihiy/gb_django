@@ -28,7 +28,15 @@ class Order(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def get_total_quantity(self):
-        pass
+        return sum(item.quantity for item in self.order_items.select_related())
+
+    def get_total_cost(self):
+        return sum(item.get_product_cost() for item in self.order_items.select_related())
+
+    def delete(self, using=None, keep_parents=False):
+        self.is_active = False
+        self.save()
+
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, verbose_name='Заказ', related_name='order_items')

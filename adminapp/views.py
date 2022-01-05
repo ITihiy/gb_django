@@ -5,16 +5,29 @@ from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 
-from adminapp.forms import ShopUserAdminEditForm, ProductCategoryForm, ProductForm
+from adminapp.forms import ShopUserAdminEditForm, ProductCategoryForm, ProductForm, OrderUpdateStatusForm
 from authapp.forms import ShopUserRegisterForm
 from authapp.models import ShopUser
 from mainapp.models import ProductCategory, Product
+from ordersapp.models import Order
 
 
 class AccessMixin:
     @method_decorator(user_passes_test(lambda u: u.is_superuser))
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
+
+
+class OrdersListView(AccessMixin, ListView):
+    model = Order
+    template_name = 'adminapp/order_list.html'
+
+
+class OrderStatusUpdateView(UpdateView):
+    model = Order
+    template_name = 'adminapp/order_form.html'
+    form_class = OrderUpdateStatusForm
+    success_url = reverse_lazy('adminapp:orders')
 
 
 class UsersListView(AccessMixin, ListView):
