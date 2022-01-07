@@ -1,9 +1,8 @@
 from django.db import transaction
+from django.forms import inlineformset_factory
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, CreateView, DetailView, DeleteView, UpdateView
-from django.forms import inlineformset_factory
 
 from basketapp.models import Basket
 from ordersapp.forms import OrderItemForm
