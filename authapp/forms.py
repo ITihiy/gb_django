@@ -3,9 +3,9 @@ import random
 from datetime import datetime
 
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, ValidationError, UserChangeForm
-from django.forms import HiddenInput
+from django.forms import HiddenInput, ModelForm
 
-from authapp.models import ShopUser
+from authapp.models import ShopUser, ShopUserProfile
 
 
 class ShopUserLoginForm(AuthenticationForm):
@@ -63,3 +63,15 @@ class ShopUserEditForm(UserChangeForm):
         if data_age < 18:
             raise ValidationError('You are too young. Age should be >= 18')
         return data_age
+
+
+class ShopUserProfileForm(ModelForm):
+    class Meta:
+        model = ShopUserProfile
+        fields = ('tag_lines', 'about_me', 'gender', 'github_profile')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form_control'
+
