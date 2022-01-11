@@ -11,6 +11,7 @@ from ordersapp.models import Order, OrderItem
 
 class OrderListView(ListView):
     model = Order
+    template_name = 'ordersapp/order_list.html'
 
     def get_queryset(self):
         return super(OrderListView, self).get_queryset().filter(is_active=True)
@@ -65,6 +66,7 @@ class OrderUpdateView(UpdateView):
     model = Order
     fields = []
     success_url = reverse_lazy('ordersapp:list')
+    template_name = 'ordersapp/order_form.html'
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)

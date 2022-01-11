@@ -24,7 +24,7 @@
                 <td>{{ object.updated_at|date:"d-m-Y" }}</td>
                 <td>{{ object.get_status_display }}</td>
                 <td>
-                    <a href="{% url 'adminapp:orders_update' object.pk %}" class="btn btn-warning">Изменить</a>
+                    <a href="{% url 'ordersapp:update' object.pk %}" class="btn btn-warning">Изменить</a>
                 </td>
             </tr>
         {% endfor %}
