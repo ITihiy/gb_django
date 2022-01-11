@@ -16,6 +16,10 @@ class ShopUser(AbstractUser):
     def is_activation_key_expired(self):
         return datetime.now(pytz.timezone(settings.TIME_ZONE)) <= self.activation_key_expired + timedelta(hours=48)
 
+    def delete(self, using=None, keep_parents=False):
+        self.is_active = False
+        self.save()
+
 
 class ShopUserProfile(models.Model):
     MALE = 'M'
