@@ -28,10 +28,10 @@ class Order(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def get_total_quantity(self):
-        return sum(item.quantity for item in self.order_items.select_related())
+        return sum(item.quantity for item in self.orderitems.select_related())
 
     def get_total_cost(self):
-        return sum(item.get_product_cost() for item in self.order_items.select_related())
+        return sum(item.get_product_cost() for item in self.orderitems.select_related())
 
     def delete(self, using=None, keep_parents=False):
         self.is_active = False
@@ -39,9 +39,13 @@ class Order(models.Model):
 
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, verbose_name='Заказ', related_name='order_items')
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, verbose_name='Заказ', related_name='orderitems')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Продукт')
     quantity = models.PositiveSmallIntegerField(default=0, verbose_name='Количество')
 
     def get_product_cost(self):
         return self.product.price * self.quantity
+
+    @classmethod
+    def get_item(cls, pk):
+        return cls.objects.get(pk=pk)

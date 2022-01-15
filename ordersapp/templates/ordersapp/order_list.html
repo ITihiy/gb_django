@@ -24,7 +24,13 @@
                 <td>{{ object.updated_at|date:"d-m-Y" }}</td>
                 <td>{{ object.get_status_display }}</td>
                 <td>
+                    <a href="{% url 'ordersapp:read' object.pk %}" class="btn btn-success">Посмотреть</a>
+                </td>
+                <td>
                     <a href="{% url 'ordersapp:update' object.pk %}" class="btn btn-warning">Изменить</a>
+                </td>
+                <td>
+                    <a href="{% url 'ordersapp:delete' object.pk %}" class="btn btn-danger">Удалить</a>
                 </td>
             </tr>
         {% endfor %}

@@ -1,8 +1,9 @@
+{% load adminapp_tags %}
 {% for item in basket_list %}
     <div class="basket_record">
-        <img src="/media/{{ item.product.image }}" alt="img"/>
-        <span class="category_name">{{ item.category.name }}</span>
-        <span class="product_name">{{ item.name }}</span>
+        <img src="{{ item.product.image|media_for_products }}" alt="img"/>
+        <span class="category_name">{{ item.product.category.name }}</span>
+        <span class="product_name">{{ item.product.name }}</span>
         <span class="product_price">{{ item.product.price }}</span>
         <input type="number" name="{{ item.pk }}" min="0" value="{{ item.quantity }}"/>
         <span class="product_cost">{{ item.product_cost }}</span>

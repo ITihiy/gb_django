@@ -25,3 +25,7 @@ class Basket(models.Model):
     @property
     def product_cost(self):
         return self.quantity * self.product.price
+
+    @classmethod
+    def get_item(cls, pk):
+        return cls.objects.get(pk=pk)

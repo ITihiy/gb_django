@@ -1,12 +1,13 @@
 from django.db import transaction
 from django.forms import inlineformset_factory
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, CreateView, DetailView, DeleteView, UpdateView
 
-from basketapp.models import Basket
+from mainapp.models import Product
 from ordersapp.forms import OrderItemForm
 from ordersapp.models import Order, OrderItem
+from .signals import *
 
 
 class OrderListView(ListView):
@@ -14,7 +15,7 @@ class OrderListView(ListView):
     template_name = 'ordersapp/order_list.html'
 
     def get_queryset(self):
-        return super(OrderListView, self).get_queryset().filter(is_active=True)
+        return super(OrderListView, self).get_queryset().filter(is_active=True, user=self.request.user)
 
 
 class OrderCreateView(CreateView):
@@ -35,6 +36,7 @@ class OrderCreateView(CreateView):
                 for num, form in enumerate(formset.forms):
                     form.initial['product'] = basket_items[num].product
                     form.initial['quantity'] = basket_items[num].quantity
+                    form.initial['price'] = basket_items[num].price
             else:
                 formset = OrderFormSet()
 
@@ -51,6 +53,8 @@ class OrderCreateView(CreateView):
             if orderitems.is_valid():
                 orderitems.instance = self.object
                 orderitems.save()
+            basket_items = Basket.objects.filter(user=self.request.user)
+            basket_items.delete()
 
         if self.object.get_total_quantity == 0:
             self.object.delete()
@@ -60,6 +64,7 @@ class OrderCreateView(CreateView):
 
 class OrderReadView(DetailView):
     model = Order
+    template_name = 'ordersapp/order_detail.html'
 
 
 class OrderUpdateView(UpdateView):
@@ -75,6 +80,9 @@ class OrderUpdateView(UpdateView):
             formset = OrderFormSet(self.request.POST, instance=self.object)
         else:
             formset = OrderFormSet(instance=self.object)
+            for form in formset.forms:
+                if form.instance.pk:
+                    form.initial['price'] = form.instance.product.price
 
         context_data['orderitems'] = formset
         return context_data
@@ -105,3 +113,11 @@ def complete(request, pk):
     order_item.status = Order.STATUS_SENT_TO_PROCEED
     order_item.save()
     return HttpResponseRedirect(reverse('ordersapp:list'))
+
+
+def get_product_price(request, pk):
+    product_price = 0
+    product = Product.objects.filter(pk=pk, is_active=True).first()
+    if product:
+        product_price = product.price
+    return JsonResponse(data={'price': product_price})

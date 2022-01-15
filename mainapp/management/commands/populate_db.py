@@ -1,4 +1,5 @@
 import json
+import random
 from django.core.management import BaseCommand
 from django.conf import settings
 
@@ -18,7 +19,9 @@ class Command(BaseCommand):
 
                 Product.objects.create(category=category, name=current['name'],
                                        short_description=current['short_description'],
-                                       description=current['description'])
+                                       description=current['description'],
+                                       price=round(random.random() * 100 + 10, 2),
+                                       quantity=random.randint(0, 100))
         print(f'Created {Product.objects.count()} products in {ProductCategory.objects.count()} categories')
 
         shop_admin = ShopUser.objects.create_superuser(

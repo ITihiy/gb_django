@@ -1,10 +1,11 @@
 {% extends 'ordersapp/base.html' %}
+{% load static %}
 
 {% block content %}
     {% include 'ordersapp/includes/inc_order_summary.html' %}
     <div class="order_form">
         <form class="form-horizontal" method="post">
-            {% csrf_token %}}
+            {% csrf_token %}
             {{ form.as_p }}
 
             <table class="table">
@@ -14,21 +15,27 @@
                         <thead>
                         <tr>
                             {% for field in form.visible_fields %}
-                                <th class="{% cycle 'td1' 'td2' 'td3' %} order">{{ field.label|capfirst }}</th>
+                                <th class="{% cycle 'td1' 'td2' 'td3' 'td4' %} order">{{ field.label|capfirst }}</th>
                             {% endfor %}
                         </tr>
                         </thead>
                     {% endif %}
                     <tr class="formset_row">
                         {% for field in form.visible_fields %}
-                            <td class="{% cycle 'td1' 'td2' 'td3' %}">
+                            <td class="{% cycle 'td1' 'td2' 'td3' 'td4' %}">
                                 {% if forloop.first %}
                                     {% for hidden_field in form.hidden_fields %}
                                         {{ hidden_field }}
                                     {% endfor %}
                                 {% endif %}
                                 {{ field.errors_as_ul }}
+                                {% if field.name == 'price' %}
+                                    <span class="orderitems-{{ forloop.parentloop.counter0 }}-price">
+                                        {{ field.value }} руб.
+                                    </span>
+                                {% else %}
                                 {{ field }}
+                                {% endif %}
                             </td>
                         {% endfor %}
                     </tr>
@@ -38,4 +45,5 @@
         </form>
     </div>
     {% include 'ordersapp/includes/inc_order_actions.html' %}
+
 {% endblock %}
