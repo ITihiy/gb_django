@@ -1,6 +1,8 @@
 *.env
+deploy/
 venv/
 .idea/
 __pycache__/
 media/
 *.pyc
+db.sqlite3
