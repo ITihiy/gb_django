@@ -15,5 +15,5 @@ def media_for_users(avatar):
 @register.filter(name='media_for_products')
 def media_for_products(image):
     if not image:
-        image = 'products/istockphoto-1159568874-612x612.jpg'
+        image = 'img/product-1.jpg'
     return f'{settings.MEDIA_URL}{image}'
