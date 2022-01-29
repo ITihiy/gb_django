@@ -5,7 +5,7 @@
 {% block content %}
    {% include 'ordersapp/includes/inc_order_summary.html' %}
    <div class="products_list">
-       {% for item in object.orderitems.select_related %}
+       {% for item in object.orderitems.all %}
            <div class="product_record">
                <img src="{{ item.product.image|media_for_products }}"
                     alt="{{ item.product.short_desc }}">
