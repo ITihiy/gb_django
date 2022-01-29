@@ -64,7 +64,7 @@ def contact(request):
 
 def product(request, pk):
     context = {
-        'links_menu': random.sample(list(ProductCategory.objects.all()), 4),
+        'links_menu': random.sample(list(ProductCategory.objects.all().select_related()), 4),
         'product': get_object_or_404(Product, pk=pk),
     }
     return render(request, 'mainapp/product.html', context)

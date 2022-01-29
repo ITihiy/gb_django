@@ -12,7 +12,7 @@ from mainapp.models import Product
 def basket(request):
     basket_totals = Basket.get_total_price_and_quantity(request.user)
     context = {
-        'basket_list': Basket.objects.filter(user=request.user),
+        'basket_list': Basket.objects.filter(user=request.user).select_related(),
         'basket_totals': basket_totals,
     }
     return render(request, 'basketapp/basket.html', context)
