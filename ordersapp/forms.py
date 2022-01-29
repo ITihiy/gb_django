@@ -1,5 +1,6 @@
 from django import forms
 
+from mainapp.models import Product
 from ordersapp.models import Order, OrderItem
 
 
@@ -26,3 +27,5 @@ class OrderItemForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for _, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
+
+        self.fields['product'].queryset = Product.objects.filter(is_active=True).select_related()
