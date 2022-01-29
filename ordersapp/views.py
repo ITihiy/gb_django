@@ -66,6 +66,20 @@ class OrderReadView(DetailView):
     model = Order
     template_name = 'ordersapp/order_detail.html'
 
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        OrderFormSet = inlineformset_factory(Order, OrderItem, form=OrderItemForm, extra=1)
+        if self.request.method == 'POST':
+            formset = OrderFormSet(self.request.POST, instance=self.object)
+        else:
+            formset = OrderFormSet(instance=self.object, queryset=self.object.orderitems.select_related())
+            for form in formset.forms:
+                if form.instance.pk:
+                    form.initial['price'] = form.instance.product.price
+
+        context_data['orderitems'] = formset
+        return context_data
+
 
 class OrderUpdateView(UpdateView):
     model = Order
