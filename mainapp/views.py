@@ -30,7 +30,7 @@ def products(request, pk=None, page=1):
     links_menu = ProductCategory.objects.all()[:4]
     if pk is not None:
         if pk == 0:
-            category_item = {'name': 'Все'}
+            category_item = ProductCategory.objects.first()
             products_list = Product.objects.all()
         else:
             category_item = get_object_or_404(ProductCategory, pk=pk)
